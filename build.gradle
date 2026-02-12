@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    // id 'name.remal.sonarlint' version '3.4.3'  // Opravená verzia
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()  // Pridané pre plugin repository
+}
+
+dependencies {
+    implementation 'org.openjfx:javafx-controls:21.0.4'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.jmockit:jmockit:1.49'
+}
+
+application {
+    mainClass = 'cz.cvut.fit.niadp.MvcGameJavaFxLauncher'
+}
+
+javafx {
+    version = "21.0.4"
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.test {
+    useJUnit()
+    jvmArgs "-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}"
+}
+
+sourceSets.main {
+    resources.srcDir 'src/main/resources'
+}
